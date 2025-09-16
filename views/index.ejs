@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mini whatsapp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Whatsapp AllChat</h2> 
+   <form action="/chats/new" method="get">
+    <button>New Chat Create....</button>
+   </form> <br><br>
+    <% for(let chat of chats) { %>
+        <div class="chat">
+            <p>From : <i><%= chat.from %></i></p>
+            <div class="msg"><p>Message : <%= chat.msg %></p> 
+                <form action="/chats/<%= chat._id%>/edit" method="get">
+                    <button>Edit</button>
+                </form><br>
+                <form action="/chats/<%= chat._id%>?_method=DELETE" method="post">
+                    <button>Delete</button>
+                </form>
+            </div>
+            <p>Received by :<i> <%= chat.to %></i></p><hr>
+            <p><%= chat.created_at.toString().split(" ")[4] %></p>
+            <p><%= chat.created_at.toString().split(" ").slice(0, 4).join("-") %></p>
+        </div>
+        <br><br>
+    <% } %>
+     
+    
+   <!-- //////////// this is popup code  -->
+     <script>
+    // client-side: use URLSearchParams, not `req`
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('deleted') === 'true') {
+      alert('Message deleted successfully!');
+      // remove query param so alert doesn't show again on reload
+      const url = new URL(window.location);
+      url.searchParams.delete('deleted');
+      window.history.replaceState({}, document.title, url.toString());
+    }
+  </script>
+</body>
+</html>
+
